@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14eabc5663c309740b372338c90601f4, type: 3}
+  m_Name: GunData
+  m_EditorClassIdentifier: 
+  gunMaps:
+  - gun: {fileID: 5098972507733359714, guid: 7d70d03129f7db64cb9be1b8792ea808, type: 3}
+    maxAmmo: 30
+    fireRate: 20
+    damage: 10
+    critRate: 0
+  - gun: {fileID: 57045952071129791, guid: de42bc242fe9c6a4d980a67519f1350e, type: 3}
+    maxAmmo: 50
+    fireRate: 30
+    damage: 30
+    critRate: 10
+  - gun: {fileID: 5919033750195789051, guid: d5ab2fe859300c14187106f4f35a35b5, type: 3}
+    maxAmmo: 100
+    fireRate: 60
+    damage: 50
+    critRate: 30
