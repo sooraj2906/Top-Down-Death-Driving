@@ -12,6 +12,7 @@ public class UiManager : MonoBehaviour
     [SerializeField] private GameObject gameWinScreen;
     [SerializeField] private TMP_Text score;
     [SerializeField] private TMP_Text timer;
+    [SerializeField] private TMP_Text ammo;
 
     private void Start()
     {
@@ -56,6 +57,11 @@ public class UiManager : MonoBehaviour
     public void UpdateTimer(string timerValue)
     {
         timer.text = timerValue;
+    }
+
+    public void UpdateAmmo(float value)
+    {
+        ammo.text = value.ToString();
     }
 
     private void OnDestroy()

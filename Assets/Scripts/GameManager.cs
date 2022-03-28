@@ -28,14 +28,14 @@ public class GameManager : MonoBehaviour
     public UiManager uiManager;
     public JoyStickHandler joystick;
     public List<WeaponController> playerWeapons = new List<WeaponController>();
+    
+    [SerializeField] private List<GameObject> inputButtons = new List<GameObject>();
     [SerializeField] private List<GameObject> spawnedPowerUps = new List<GameObject>();
 
     public List<GameObject> enemyTurrets;
     public bool isPlaying;
     private int turretDestroyed;
-
-    private CarMap _selectedCarMap;
-    private GunMap _selectedGunMap;
+    private bool isPaused;
 
     public float timer = 30f;
 
@@ -55,7 +55,6 @@ public class GameManager : MonoBehaviour
     //This method helps to select a car from the car selection screen with the help of the CarData scriptable object
     public void SelectCar(int carId)
     {
-        _selectedCarMap = carData.carMaps.Find(x => x.car.name.Contains(carId.ToString()));
         var car = Instantiate(carData.GetCarPrefab(carId), Vector3.zero, Quaternion.identity);
         carController = car.GetComponent<CarController>();
         carController.maxHealthPoints = carData.GetCarHp(carId);
@@ -67,7 +66,6 @@ public class GameManager : MonoBehaviour
     //This method helps to select a gun from the weapon selection screen with the help of the GunData scriptable object
     public void SelectGun(int gunId)
     {
-        _selectedGunMap = gunData.gunMaps.Find(x => x.gun.name.Contains(gunId.ToString()));
         var weaponSpawns = carController.GetWeaponSpawns();
         foreach (var gun in weaponSpawns.Select(weaponSpawn =>
             Instantiate(gunData.GetGun(gunId), weaponSpawn.position, weaponSpawn.rotation, weaponSpawn.transform)))
@@ -86,13 +84,14 @@ public class GameManager : MonoBehaviour
     {
         foreach (var playerWeapon in playerWeapons)
         {
-            playerWeapon.maxAmmo = gunData.GetGunMaxAmmo(gunId);
+            playerWeapon.ammo = gunData.GetGunMaxAmmo(gunId);
             playerWeapon.damage = gunData.GetGunDamage(gunId);
             playerWeapon.critRate = gunData.GetGunCritRate(gunId) / 10;
             playerWeapon.rateOfFire = gunData.GetGunFireRate(gunId) / 10;
             playerWeapon.isPlayer = true;
             playerWeapon.canFire = true;
         }
+        uiManager.UpdateAmmo(playerWeapons[0].ammo);
         //Invokes the onGameStart so that other classes can listen to it and initialize
         onGameStart?.Invoke();
         isPlaying = true;
@@ -176,14 +175,39 @@ public class GameManager : MonoBehaviour
     {
         foreach (var weapon in playerWeapons)
         {
-            weapon.maxAmmo += ammo;
+            weapon.ammo += ammo;
         }
+        uiManager.UpdateAmmo(playerWeapons[0].ammo);
     }
 
     //Returns the 1st player weapon in the list
     public WeaponController GetPlayerWeapon()
     {
         return playerWeapons[0];
+    }
+
+    public void PauseGame()
+    {
+        if (!isPaused)
+        {
+            Time.timeScale = 0;
+            isPaused = true;
+            DisableButtons(true);
+        }
+        else
+        {
+            Time.timeScale = 1;
+            isPaused = false;
+            DisableButtons(false);
+        }
+    }
+
+    private void DisableButtons(bool canDisable)
+    {
+        foreach (var button in inputButtons)
+        {
+            button.SetActive(!canDisable);
+        }
     }
 
     //Unsibscribe to events and destroy spawned gameobjects

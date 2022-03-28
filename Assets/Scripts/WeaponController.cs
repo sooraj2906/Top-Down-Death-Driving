@@ -10,7 +10,7 @@ public class WeaponController : MonoBehaviour
     public float rateOfFire;
     public float damage;
     public float critRate;
-    public float maxAmmo;
+    public float ammo;
     public bool isPlayer;
     public bool isButtonPressed;
 
@@ -46,13 +46,14 @@ public class WeaponController : MonoBehaviour
         var bulletGo = ObjectPooling.ObjectPoolInstance.GetPooledBullets(true);
         if (bulletGo != null)
         {
-            if (maxAmmo > 0)
+            if (ammo > 0)
             {
                 bulletGo.transform.position = bulletSpawnTransform.position;
                 bulletGo.transform.rotation = Quaternion.identity;
                 bulletGo.SetActive(true);
                 bulletGo.GetComponent<PlayerBulletController>().Shoot(GetBulletDirection());
-                maxAmmo--;
+                ammo--;
+                GameManager.gameManagerPInstance.uiManager.UpdateAmmo(ammo);
             }
         }
 
@@ -64,6 +65,12 @@ public class WeaponController : MonoBehaviour
     private Vector3 GetBulletDirection()
     {
         return bulletSpawnTransform.position - transform.position;
+    }
+
+    //Returns the number of ammo left
+    public float GetAmmoCount()
+    {
+        return ammo;
     }
 
     public float GetDamage()
