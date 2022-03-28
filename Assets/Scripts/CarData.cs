@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Stores the data of individual cars
+/// </summary>
 [System.Serializable]
 public class CarMap
 {
@@ -11,6 +14,9 @@ public class CarMap
     public float handling;
 }
 
+/// <summary>
+/// //Creates a new scriptable object that helps us to store the data of different types of cars
+/// </summary>
 [CreateAssetMenu(menuName = "DesertDeathRace/CarData")]
 public class CarData : ScriptableObject
 {
@@ -43,7 +49,7 @@ public class CarData : ScriptableObject
         return value;
     }
 
-    public GameObject GetCardPrefab(int carId)
+    public GameObject GetCarPrefab(int carId)
     {
         var value = new GameObject();
         var carMap = carMaps.Find(x => x.car.name.Contains(carId.ToString()));

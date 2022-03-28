@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
     public void SelectCar(int carId)
     {
         _selectedCarMap = carData.carMaps.Find(x => x.car.name.Contains(carId.ToString()));
-        var car = Instantiate(_selectedCarMap.car, Vector3.zero, Quaternion.identity);
+        var car = Instantiate(carData.GetCarPrefab(carId), Vector3.zero, Quaternion.identity);
         carController = car.GetComponent<CarController>();
         carController.maxHealthPoints = carData.GetCarHp(carId);
         carController.maxSpeed = carData.GetCarSpeed(carId) / 10f;
@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour
         _selectedGunMap = gunData.gunMaps.Find(x => x.gun.name.Contains(gunId.ToString()));
         var weaponSpawns = carController.GetWeaponSpawns();
         foreach (var gun in weaponSpawns.Select(weaponSpawn =>
-            Instantiate(_selectedGunMap.gun, weaponSpawn.position, weaponSpawn.rotation, weaponSpawn.transform)))
+            Instantiate(gunData.GetGun(gunId), weaponSpawn.position, weaponSpawn.rotation, weaponSpawn.transform)))
         {
             var weaponController = gun.GetComponent<WeaponController>();
             gun.GetComponent<EnemyTurretController>().enabled = false;
